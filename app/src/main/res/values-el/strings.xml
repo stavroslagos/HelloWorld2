@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bot - Aegean Victim</string>
+    <string name="menu5">Συσκευή (πληροφορίες)</string>
+    <string name="convertimage">Μετατροπή εικόνας</string>
+    <string name="menu3">Σύνδεση με BotMaster</string>
+    <string name="menu4">Έναρξη BotM Server</string>
+    <string name="convert">Μετατροπή κειμένου</string>
+</resources>

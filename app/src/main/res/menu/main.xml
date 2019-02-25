@@ -21,5 +21,9 @@
         android:id="@+id/action_menu4"
         android:title="@string/menu4"
         app:showAsAction="collapseActionView"/>
-
+    <item
+        android:orderInCategory="5"
+        android:id="@+id/action_menu5"
+        android:title="@string/menu5"
+        app:showAsAction="collapseActionView"/>
 </menu>

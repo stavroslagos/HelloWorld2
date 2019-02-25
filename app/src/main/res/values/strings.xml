@@ -1,7 +1,8 @@
 <resources>
     <string name="convert">String Convert</string>
-    <string name="menu3">Connect2BotMaster</string>
-    <string name="menu4">Check internet</string>
+    <string name="menu3">Connect 2 BotMaster</string>
+    <string name="menu4">BotMaster Server</string>
+    <string name="menu5">Device Info</string>
     <string name="convertimage">Image Convert</string>
-    <string name="app_name">Bot - Aegean Victim</string>
+    <string name="app_name" translatable="false">Bot - Aegean Victim</string>
 </resources>

