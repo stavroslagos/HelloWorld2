@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -175,7 +176,11 @@ public class MainActivity extends AppCompatActivity {
         GetLocalIP();
         if(status){
             mString2Byte.append("Internet up. Connecting to bot master\n"+localip+"\n");
-            connect2BotMaster();
+            //connect2BotMaster();
+            String[] botmaster = {"192.168.1.8", "9999", "1", "Various system info", "bot12" };
+            String result = null;
+            new transmit().execute(botmaster);
+            mString2Byte.append(result);
         }else {
             mString2Byte.append("Internet is down\n");
         }
@@ -187,6 +192,8 @@ public class MainActivity extends AppCompatActivity {
         GetLocalIP();
         if(status){
             mString2Byte.append("Internet up. Starting server\n"+localip+"\n");
+            int serverport=9999;
+            new receive().execute(serverport);
         }else {
             mString2Byte.append("Internet is down\n");
         }
