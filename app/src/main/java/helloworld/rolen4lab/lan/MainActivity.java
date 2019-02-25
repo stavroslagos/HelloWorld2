@@ -14,7 +14,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +50,7 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
     public TextView mString2Byte;
     public EditText mPlainString;
+    public Button mOnLine;
     public boolean status=false;
     public String localip="127.0.0.1";
     public String botmaster_myname;
@@ -55,7 +61,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mString2Byte = (TextView) findViewById(R.id.tv_byte_view);
         mPlainString = (EditText) findViewById(R.id.et_string_to_byte);
-
+        mOnLine = (Button) findViewById(R.id.rb_online);
+        Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
+        animation.setDuration(500); // duration - half a second
+        animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+        animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
+        animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+        mOnLine.startAnimation(animation);
+        mOnLine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                view.clearAnimation();
+            }
+        });
+        GetLocalIP();
 
     }
 

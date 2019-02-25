@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:background="@drawable/logo"
     tools:context=".MainActivity">
 
     <EditText
@@ -12,8 +11,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="8dp" />
+        android:paddingTop="8dp"
+        android:paddingRight="8dp" />
+    <TextView
+        android:id="@+id/tv_device_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"/>
+    <Button
+        android:id="@+id/rb_online"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/online"
+        android:checked="false"/>
 
     <ScrollView
         android:layout_width="match_parent"
