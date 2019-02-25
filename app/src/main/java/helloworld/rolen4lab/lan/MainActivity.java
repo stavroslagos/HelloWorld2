@@ -41,10 +41,10 @@ import java.util.Arrays;
 // test info
 
 public class MainActivity extends AppCompatActivity {
-    private TextView mString2Byte;
-    private EditText mPlainString;
-    private boolean status=false;
-    private String localip="127.0.0.1";
+    public TextView mString2Byte;
+    public EditText mPlainString;
+    public boolean status=false;
+    public String localip="127.0.0.1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void storeimage(Bitmap bm, String filename){
-        String dirpath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp8ack";
+       /* String dirpath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp8ack";
         File dir = new File(dirpath);
         if (!dir.exists()){
             dir.mkdir();
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             FileOutputStream fos = new FileOutputStream(file);
         } catch (IOException e){
             e.printStackTrace();
-        }
+        } */
     }
 
     void convertPlaintext2Byte(){
@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void convertImage2Byte() {
+        /*
         //Invoke the photogallery
         //Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         }catch (IOException e) {
             e.printStackTrace();
-        }
+        } */
 
 
 
@@ -131,45 +132,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void startBotMasterConnection(){
-        ServerSocket ss;
-        Socket s;
-        DataInputStream dis;
-        PrintWriter pw;
-        try {
-            ss = new ServerSocket(9999);
-            s = ss.accept();
-            InputStreamReader isr = new InputStreamReader(s.getInputStream());
-            BufferedReader br = new BufferedReader(isr);
-            String message = br.readLine();
-            mString2Byte.append("Bot connected : "+message+"\n");
-            br.close();
-            isr.close();
-            s.close();
-            ss.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void connect2BotMaster() {
-        DataOutputStream dos;
-        PrintWriter pw = null;
-        Socket s1;
-        try {
-            s1 = new Socket("192.168.1.8", 9999);
-            pw = new PrintWriter(s1.getOutputStream());
-            pw.write("bot1.started");
-            pw.flush();
-            pw.close();
-            //s1.close();
-
-        } catch (IOException ex){
-            ex.printStackTrace();
-        }
-    }
 
     void menu3WasClicked(){
         mString2Byte.append("Check internet connection\n");
@@ -192,8 +154,10 @@ public class MainActivity extends AppCompatActivity {
         GetLocalIP();
         if(status){
             mString2Byte.append("Internet up. Starting server\n"+localip+"\n");
-            int serverport=9999;
+            String serverport="9999";
+            String message = null;
             new receive().execute(serverport);
+            mString2Byte.append(message);
         }else {
             mString2Byte.append("Internet is down\n");
         }

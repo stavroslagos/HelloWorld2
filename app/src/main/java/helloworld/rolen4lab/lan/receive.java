@@ -37,4 +37,8 @@ public class receive extends AsyncTask<String, Void, String> {
         return message;
     }
 
+    @Override
+    protected void onPostExecute(String s) {
+        
+    }
 }
