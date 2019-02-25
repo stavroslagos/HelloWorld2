@@ -37,6 +37,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+// test info
+
 public class MainActivity extends AppCompatActivity {
     private TextView mString2Byte;
     private EditText mPlainString;
