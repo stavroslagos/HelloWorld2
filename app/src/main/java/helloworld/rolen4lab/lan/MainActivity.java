@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     public EditText mPlainString;
     public boolean status=false;
     public String localip="127.0.0.1";
+    public String botmaster_myname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mString2Byte = (TextView) findViewById(R.id.tv_byte_view);
         mPlainString = (EditText) findViewById(R.id.et_string_to_byte);
+
 
     }
 
@@ -135,14 +137,17 @@ public class MainActivity extends AppCompatActivity {
 
     void menu3WasClicked(){
         mString2Byte.append("Check internet connection\n");
+        String[] botmaster = {"192.168.1.11", "9999", "1", "Various system info", "bot12"};
+        String result = null;
+        new transmit().execute(botmaster);
         GetLocalIP();
         if(status){
             mString2Byte.append("Internet up. Connecting to bot master\n"+localip+"\n");
             //connect2BotMaster();
-            String[] botmaster = {"192.168.1.8", "9999", "1", "Various system info", "bot12" };
-            String result = null;
+            //String[] botmaster = {"192.168.1.8", "9999", "1", "Various system info", "bot12" };
+            //String result = null;
             new transmit().execute(botmaster);
-            mString2Byte.append(result);
+            //mString2Byte.append(result);
         }else {
             mString2Byte.append("Internet is down\n");
         }
@@ -157,12 +162,91 @@ public class MainActivity extends AppCompatActivity {
             String serverport="9999";
             String message = null;
             new receive().execute(serverport);
-            mString2Byte.append(message);
+            //mString2Byte.append(message);
         }else {
             mString2Byte.append("Internet is down\n");
         }
 
     }
+    public class receive extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            //int port = Integer.parseInt(strings[0]);
+            String[] str_port = strings;
+            //int port = Integer.parseInt(str_port[0]);
+            int port = 9999;
+            ServerSocket ss;
+            Socket s;
+            DataInputStream dis;
+            PrintWriter pw;
+            String message = null;
+            try {
+                ss = new ServerSocket(port);
+                s = ss.accept();
+                InputStreamReader isr = new InputStreamReader(s.getInputStream());
+                BufferedReader br = new BufferedReader(isr);
+                message = br.readLine();
+                //mString2Byte.append("Bot connected : "+message+"\n");
+                //onProgressUpdate(message);
+                br.close();
+                isr.close();
+                s.close();
+                ss.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return message;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            mString2Byte.setText(s);
+        }
+    }
+    public class transmit extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            //String botmaster = strings[];
+            String result = "";
+            String botmaster_ip = strings[0];
+            String botmaster_port = strings[1];
+            int botmaster_port_int;
+            botmaster_port_int = Integer.parseInt(botmaster_port);
+            String botmaster_type = strings[2];
+            String botmaster_message = strings[3];
+            String botmaster_myname = strings[4];
+            String message = botmaster_myname;
+            DataOutputStream dos;
+            PrintWriter pw = null;
+            Socket s1;
+            try {
+                //s1 = new Socket("192.168.1.8", 9999);
+                s1 = new Socket(botmaster_ip,botmaster_port_int);
+                pw = new PrintWriter(s1.getOutputStream());
+                if(botmaster_type == "1"){
+                    message = "new recruit" + botmaster_myname + " " + botmaster_message;
+                    result = "new bot";
+                } else {
+                    message = "heartbeat" + botmaster_myname;
+                    result = "heartbeat";
+                }
+                pw.write(message);
+                pw.flush();
+                pw.close();
+                s1.close();
+            } catch (IOException ex){
+                ex.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            mString2Byte.setText(s);
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
